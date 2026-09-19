@@ -163,7 +163,7 @@ Estrutura serializável por tick:
 ### Mão livre (RMB)
 
 - Enquanto RMB estiver segurado, o mouse controla `free_hand_target`; a arma mantém a última posição.
-- **Parry**: contato da mão livre com a **chapa/lateral** da lâmina inimiga com velocidade mínima, dentro de ~150 ms do início do contato → lâmina desviada, atacante perde equilíbrio. Contato com o **fio** ou fora da janela → dano no braço.
+- **Parry**: contato da mão livre com a **chapa/lateral** da lâmina inimiga com velocidade mínima, dentro de ~150 ms desde que o RMB foi pressionado → lâmina desviada, atacante perde equilíbrio. Contato com o **fio** ou fora da janela → dano no braço.
 - **Agarrar**: contato da mão livre com pulso/antebraço inimigo + LMB → segura; puxar/torcer com o mouse pode forçar o inimigo a soltar a arma (**desarmar**), em disputa de força muscular.
 - **Empurrar**: mão livre contra o tronco com velocidade → dreno de equilíbrio.
 
