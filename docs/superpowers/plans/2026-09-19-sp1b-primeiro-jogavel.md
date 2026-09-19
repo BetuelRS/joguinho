@@ -425,7 +425,7 @@ func snap(reach: float) -> void:
 **Interfaces:**
 - Produces:
   - `InputBindings.ensure_defaults() -> void` — cria no `InputMap` (se não existirem) as ações: `move_forward` W, `move_back` S, `move_left` A, `move_right` D, `sprint` Shift, `jump` Espaço, `crouch` Ctrl, `dodge` C, `tension` LMB, `free_hand` RMB, `thrust` F, `kick` X, `grip_toggle` G, `throw` T, `lock_on` botão do meio, `camera_toggle` V, `weapon_1` 1, `weapon_2` 2, `debug_panel` F1, `release_mouse` Esc.
-  - `InputSampler.new()`; `held: Dictionary` (StringName → bool) e `pressed: Dictionary` (StringName → bool, apertado desde o último tick), `mouse_delta: Vector2`, `wheel_steps: int`
+  - `InputSampler.new(tuning: HandTuning)`; `held: Dictionary` (StringName → bool) e `pressed: Dictionary` (StringName → bool, apertado desde o último tick), `mouse_delta: Vector2`, `wheel_steps: int`
   - `InputSampler.build_command(tick: int, mapper: ReachMapper, roll: float, reach: float, precision: float, dt: float) -> InputCommand` — aplica `mouse_delta` ao `mapper` (transbordo → `look_yaw_delta`) exceto quando `free_hand` está segurado (aí o mouse move `free_hand_target` por um segundo `ReachMapper` interno); preenche o comando; **zera** `pressed`, `mouse_delta` e `wheel_steps` (consumidos).
   - `InputSampler.roll_delta(roll_step: float) -> float` é incorporado: `blade_roll = roll + wheel_steps * roll_step`.
 
@@ -838,9 +838,6 @@ O sinal exato dos limites de cotovelo, joelho e quadril depende da convenção d
 ```gdscript
 extends GutTest
 
-const Spec := preload("res://src/sim/fighter/fighter_body_spec.gd")
-
-
 func before_all() -> void:
 	Engine.time_scale = 4.0
 
@@ -1222,7 +1219,7 @@ func test_severed_leg_limb_detaches() -> void:
 - [ ] **Step 3: Implementar `Fighter` e `Locomotion`** seguindo a interface. Regras:
   - Todo torque de músculo entre pai e filho: `+t` no filho, `−t` no pai (conserva momento).
   - Nenhum número mágico: tudo de `LocomotionTuning`.
-  - `Fighter._ready()` constrói `FighterBody` com `FighterBodySpec.default_human()`, posiciona em `global_position`, cria estado (`BodyHealth`, `Balance`, `Stamina`) com `fighter_tuning`, conecta sinais.
+  - `Fighter._ready()` constrói `FighterBody` com `FighterBodySpec.default_human()`, posicionado em `global_position` e **girado por `facing_yaw`** (definido antes de entrar na árvore), cria estado (`BodyHealth`, `Balance`, `Stamina`) com `fighter_tuning`, conecta sinais.
   - O `Fighter` processa antes dos controladores dele: `process_physics_priority = -10`.
 
 - [ ] **Step 4: Rodar e ver passar** — 8 PASS. Ajustes de tuning são esperados; se mudar padrões de `LocomotionTuning`, registre os valores e o motivo.
