@@ -67,6 +67,14 @@ func section_at(y: float) -> WeaponSection:
 	return best
 
 
+## Direção (espaço local) para fora do fio que tocou, para HitClassifier.edge_dir.
+## +X para o fio principal; -X para o fio de trás (só em armas de dois fios).
+func edge_dir_at(local_normal: Vector3) -> Vector3:
+	if double_edged and local_normal.x < 0.0:
+		return Vector3.LEFT
+	return Vector3.RIGHT
+
+
 func zone_at(local_point: Vector3, local_normal: Vector3) -> int:
 	var s := section_at(local_point.y)
 	match s.kind:

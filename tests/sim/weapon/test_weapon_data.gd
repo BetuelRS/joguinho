@@ -74,3 +74,20 @@ func test_zone_handle() -> void:
 func test_zone_outside_clamps_to_nearest_section() -> void:
 	assert_eq(_two_block_weapon().zone_at(Vector3(0, -0.5, 0), Vector3.RIGHT), WeaponZone.Kind.HANDLE)
 	assert_eq(_two_block_weapon().zone_at(Vector3(0, 0.9, 0), Vector3.UP), WeaponZone.Kind.TIP)
+
+
+func test_edge_dir_double_edged_left_normal_is_left() -> void:
+	var w := _two_block_weapon()
+	w.double_edged = true
+	assert_eq(w.edge_dir_at(Vector3.LEFT), Vector3.LEFT)
+
+
+func test_edge_dir_double_edged_right_normal_is_right() -> void:
+	var w := _two_block_weapon()
+	w.double_edged = true
+	assert_eq(w.edge_dir_at(Vector3.RIGHT), Vector3.RIGHT)
+
+
+func test_edge_dir_single_edged_left_normal_is_right() -> void:
+	var w := _two_block_weapon()
+	assert_eq(w.edge_dir_at(Vector3.LEFT), Vector3.RIGHT)
