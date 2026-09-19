@@ -32,3 +32,5 @@ extends Resource
 @export var sprint_per_s: float = 10.0
 ## Multiplicador de força muscular quando a stamina acaba.
 @export var exhausted_strength: float = 0.6
+## Stamina precisa voltar a este valor para sair da exaustão.
+@export var exhaustion_recover_threshold: float = 25.0

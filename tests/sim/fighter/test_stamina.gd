@@ -60,3 +60,49 @@ func test_spending_resets_regen_delay() -> void:
 	for i in int(ft.stamina_regen_delay * 0.5 / DT):
 		s.step(DT)
 	assert_eq(s.value, ft.stamina_max - 51.0)
+
+
+func _drain_to_zero() -> void:
+	for i in 10000:
+		if not s.drain_continuous(ft.tension_per_s, DT):
+			break
+
+
+func test_exhaustion_latches_until_threshold() -> void:
+	_drain_to_zero()
+	assert_true(s.is_exhausted())
+	var ticks := int(3.0 / DT)
+	for i in ticks:
+		if s.value >= ft.exhaustion_recover_threshold:
+			break
+		assert_true(s.is_exhausted())
+		assert_eq(s.strength_factor(), ft.exhausted_strength)
+		s.drain_continuous(ft.tension_per_s, DT)
+		s.step(DT)
+
+
+func test_exhaustion_clears_after_threshold() -> void:
+	_drain_to_zero()
+	for i in 10000:
+		s.step(DT)
+		if s.value >= ft.exhaustion_recover_threshold:
+			break
+	assert_false(s.is_exhausted())
+	assert_eq(s.strength_factor(), 1.0)
+
+
+func test_exhausted_cannot_spend() -> void:
+	_drain_to_zero()
+	for i in 10000:
+		s.step(DT)
+		if s.value >= 10.0:
+			break
+	assert_false(s.try_spend(5.0))
+
+
+func test_negative_inputs_are_noops() -> void:
+	var before := s.value
+	s.drain_continuous(-5.0, DT)
+	assert_eq(s.value, before)
+	assert_false(s.try_spend(-3.0))
+	assert_eq(s.value, before)
