@@ -19,6 +19,8 @@ extends Resource
 @export_group("Classificação")
 @export var cut_max_angle_deg: float = 35.0
 @export var thrust_max_angle_deg: float = 25.0
+## Componente mínima da velocidade na direção do fio (0–1) para contar como corte; evita que deslizar a lâmina ao longo do eixo corte.
+@export var cut_min_edge_dot: float = 0.25
 
 @export_group("Equilíbrio")
 @export var balance_per_joule_cut: float = 0.05

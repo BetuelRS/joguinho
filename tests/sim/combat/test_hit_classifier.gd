@@ -46,3 +46,22 @@ func test_head_is_blunt() -> void:
 
 func test_zero_velocity_is_blunt() -> void:
 	assert_eq(_classify(WeaponZone.Kind.EDGE, Vector3.ZERO), HitType.Kind.BLUNT)
+
+
+func test_diagonal_draw_cut_is_cut() -> void:
+	# 45° entre fio e eixo, mas ainda no plano da lâmina: continua corte.
+	assert_eq(_classify(WeaponZone.Kind.EDGE, Vector3(1, 1, 0) * 10.0), HitType.Kind.CUT)
+
+
+func test_pure_axial_slide_on_edge_is_blunt() -> void:
+	# Deslizar ao longo do eixo da lâmina não é corte.
+	assert_eq(_classify(WeaponZone.Kind.EDGE, Vector3(0, 10, 0)), HitType.Kind.BLUNT)
+
+
+func test_edge_moving_backwards_is_blunt() -> void:
+	assert_eq(_classify(WeaponZone.Kind.EDGE, Vector3(-10, 0, 0)), HitType.Kind.BLUNT)
+
+
+func test_guard_and_handle_are_blunt() -> void:
+	assert_eq(_classify(WeaponZone.Kind.GUARD, Vector3(10, 0, 0)), HitType.Kind.BLUNT)
+	assert_eq(_classify(WeaponZone.Kind.HANDLE, Vector3(10, 0, 0)), HitType.Kind.BLUNT)
