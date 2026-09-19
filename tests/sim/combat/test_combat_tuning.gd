@@ -20,6 +20,18 @@ func test_blunt_drains_more_balance_than_cut() -> void:
 	assert_gt(t.balance_per_joule(HitType.Kind.BLUNT), t.balance_per_joule(HitType.Kind.CUT))
 
 
+func test_type_mult_for_thrust_on_limb_uses_limb_mult() -> void:
+	assert_eq(t.type_mult_for(HitType.Kind.THRUST, BodyPart.Kind.LEG_R), t.thrust_limb_mult)
+
+
+func test_type_mult_for_thrust_on_head_uses_thrust_mult() -> void:
+	assert_eq(t.type_mult_for(HitType.Kind.THRUST, BodyPart.Kind.HEAD), t.thrust_mult)
+
+
+func test_type_mult_for_cut_on_arm_uses_cut_mult() -> void:
+	assert_eq(t.type_mult_for(HitType.Kind.CUT, BodyPart.Kind.ARM_L), t.cut_mult)
+
+
 func test_body_part_helpers() -> void:
 	assert_true(BodyPart.is_limb(BodyPart.Kind.ARM_R))
 	assert_false(BodyPart.is_limb(BodyPart.Kind.HEAD))

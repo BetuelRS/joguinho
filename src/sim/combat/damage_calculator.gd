@@ -7,7 +7,7 @@ static func damage(energy: float, hit_type: int, part: int, weapon_mult: float, 
 	if energy <= tuning.graze_energy:
 		return 0.0
 	return (energy - tuning.graze_energy) * tuning.damage_per_joule \
-		* tuning.type_mult(hit_type) * tuning.part_mult(part) * weapon_mult
+		* tuning.type_mult_for(hit_type, part) * tuning.part_mult(part) * weapon_mult
 
 
 static func balance_drain(energy: float, hit_type: int, tuning: CombatTuning) -> float:

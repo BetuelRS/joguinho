@@ -18,6 +18,11 @@ func test_thrust_on_head() -> void:
 	assert_almost_eq(DamageCalculator.damage(110.0, HitType.Kind.THRUST, BodyPart.Kind.HEAD, 1.0, t), 130.0, 1e-4)
 
 
+func test_thrust_on_limb_uses_limb_mult() -> void:
+	# (110 - 10) * 0.5 * 0.8 * 0.7 = 28.0
+	assert_almost_eq(DamageCalculator.damage(110.0, HitType.Kind.THRUST, BodyPart.Kind.ARM_L, 1.0, t), 28.0, 1e-4)
+
+
 func test_weapon_mult_scales_damage() -> void:
 	var base := DamageCalculator.damage(110.0, HitType.Kind.CUT, BodyPart.Kind.TORSO, 1.0, t)
 	var doubled := DamageCalculator.damage(110.0, HitType.Kind.CUT, BodyPart.Kind.TORSO, 2.0, t)

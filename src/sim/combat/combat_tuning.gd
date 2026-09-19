@@ -15,6 +15,8 @@ extends Resource
 @export var leg_mult: float = 0.8
 ## Energia mínima (J) de um corte para decepar um membro já zerado.
 @export var sever_energy: float = 120.0
+## Multiplicador de perfuração em braços e pernas (substitui thrust_mult nos membros).
+@export var thrust_limb_mult: float = 0.8
 
 @export_group("Classificação")
 @export var cut_max_angle_deg: float = 35.0
@@ -44,6 +46,12 @@ func type_mult(hit_type: int) -> float:
 			return thrust_mult
 		_:
 			return blunt_mult
+
+
+func type_mult_for(hit_type: int, part: int) -> float:
+	if hit_type == HitType.Kind.THRUST and BodyPart.is_limb(part):
+		return thrust_limb_mult
+	return type_mult(hit_type)
 
 
 func part_mult(part: int) -> float:
