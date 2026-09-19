@@ -1928,4 +1928,16 @@ Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
 
 - **SP1-B — Corpo físico e controle:** lutador ragdoll ativo (corpos Jolt + juntas + músculos PD), esqueleto-alvo com locomoção procedural por IK, mola da pelve ligada a `Balance.support_factor()`, mão da arma seguindo `InputCommand.hand_target` na esfera de alcance, giro por borda, tensão/carga, pegada 1/2 mãos/invertida, câmera 1ª/3ª e lock-on, coletor de input (mouse/teclado → `InputCommand`), arena cinza provisória.
 - **SP1-C — Combate físico:** CCD nas armas, detecção de contatos → `zone_at` + `HitClassifier` + `CombatMath` → `HitEvent`/`ClashEvent`, disputa de momentum, mão livre (parry, agarrar/desarmar, empurrar), estocada, chute, esquiva, arremesso, desmembramento físico, obstáculo trava golpe, efeitos mínimos (faísca, tremor, hit stop).
+### Pendências herdadas da revisão final do SP1-A (obrigatórias nos próximos planos)
+
+- **SP1-B/C — drenos de equilíbrio sem dono:** golpe pesado que erra (sobre-extensão), perna ferida (dreno + velocidade máxima reduzida), e parâmetros em `CombatTuning`/`FighterTuning` para drenos que não vêm de acerto (chute, parry sofrido, golpe errado).
+- **SP1-B — braço ferido:** `BodyHealth.limb_strength()` reduz força muscular **e** precisão do alvo da mão.
+- **SP1-B — corpo da arma:** `RigidBody3D` com `center_of_mass_mode = CUSTOM` e inércia explícita vindos de `WeaponData`; `r` do contato medido a partir do centro de massa, não da guarda.
+- **SP1-C — contato:** `v_rel` com velocidades de antes do passo de física (senão a energia sai perto de zero); verificar uma vez o sentido da normal do contato do Jolt; usar `WeaponData.edge_dir_at()` para `edge_dir`.
+- **SP1-C — eventos:** `ClashEvent` com vários pontos e suporte a choque arma↔mão livre; `limb_severed`/`lost`/`died` levarem tick e id do lutador; aplicar `clash_balance_drain` no perdedor; parry falho fere o braço.
+- **SP1-B/C — mortos e membros decepados:** equilíbrio de lutador morto para de rodar; acerto em parte já decepada é ignorado.
+- **SP1-B — `InputCommand`:** definir que ações únicas (estocada, chute, pulo, esquiva, pegada, arremesso, lock-on) significam "apertado neste tick"; o espelho grava comandos já passados por `to_bytes`/`from_bytes`.
+- **SP1-C — pergunta ao usuário:** a marreta não tem zona de chapa, então nunca pode sofrer parry. Isso é intencional?
+- **SP1-D — ajuste:** os valores padrão estão extremos (cabeça de marreta ≈ 295 J mata com um golpe na cabeça; choque com marreta derruba na hora; bloqueio ≈ 40 de equilíbrio; decepar pede ≈ 30 m/s na ponta da espada). Adicionar `@export_range` a todos os parâmetros e `WeaponData.is_valid()`.
+
 - **SP1-D — Treino, assets e ajuste:** boneco, bot, espelho; painel F1 sobre `CombatTuning`/`FighterTuning`, câmera lenta e vetores; geradores Blender (manequim segmentado, espada, marreta, arena); testes de cenário headless, teste de desempenho de 8 lutadores e verificação de 60 FPS na UHD 730.
